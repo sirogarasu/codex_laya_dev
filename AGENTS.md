@@ -41,7 +41,6 @@ docker compose up --build
 
 主なエンドポイントは次の通りです。
 
-- Laya UI: `http://localhost:17860/ui`
 - Laya API: `http://localhost:17861`
 - APIドキュメント: `http://localhost:17861/docs`
 - 起動状態確認: `http://localhost:17861/readyz`

@@ -6,3 +6,6 @@ venv/
 .env
 .env.*
 !.env.example
+
+# Local work handoff notes; kept across devcontainer restarts, not committed.
+/HANDOFF.local.md

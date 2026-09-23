@@ -12,9 +12,8 @@ RUN python -m pip install --no-cache-dir --index-url https://download.pytorch.or
       laya==0.3.4 \
       "fastapi>=0.115,<1" \
       "uvicorn[standard]>=0.34,<1" \
-      "gradio>=5,<7" \
       httpx
 
 COPY api.py /app/api.py
 
-CMD ["python", "api.py"]
+CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
