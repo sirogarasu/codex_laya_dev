@@ -1,0 +1,37 @@
+services:
+  codex:
+    build:
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    command: sleep infinity
+    volumes:
+      - .:/workspaces/codex_laya_dev
+    depends_on:
+      - laya-api
+
+  laya-api:
+    build:
+      context: ./laya
+      dockerfile: Dockerfile
+    ports:
+      - "127.0.0.1:17861:8000"
+    volumes:
+      - laya_models:/models/huggingface
+    environment:
+      HF_HOME: /models/huggingface
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/readyz')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+
+volumes:
+  laya_models:

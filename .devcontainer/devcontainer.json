@@ -1,0 +1,17 @@
+{
+  "name": "codex-laya-dev",
+  "dockerComposeFile": "../compose.yaml",
+  "service": "codex",
+  "workspaceFolder": "/workspaces/codex_laya_dev",
+  "remoteUser": "node",
+  "shutdownAction": "stopCompose",
+  "postCreateCommand": "bash .devcontainer/postCreateCommand.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint"
+      ]
+    }
+  }
+}
