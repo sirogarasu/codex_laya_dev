@@ -126,3 +126,13 @@ python3 -m harness.smoke --base-url http://laya-api:8000
 CUDAのmetadata、readiness、`choice`・`noul`・`score`の応答形式と信頼度、
 不正な入力3件のHTTP 422を検査します。未反映の旧API、CPU状態、契約違反、
 通信障害では終了コード1になります。意味的な正解率の評価はShadow Modeで別途行います。
+
+追加の探索評価は `examples/tool_selection_challenge.jsonl` にあります。20タスクを
+選択肢の元順・逆順で評価する40例で、曖昧な指示、対象外要求、複数操作、誤誘導、
+Policy拒否を含みます。[評価結果と制限](docs/shadow-challenge.md)を参照してください。
+この集合は改善点を探すためのもので、最終評価用の未観測データではありません。
+
+構造化した候補の必須引数や操作数をモデル外で検査する評価は
+`examples/tool_selection_preconditions.jsonl` で実行できます。
+[入力契約・検査の範囲・GPU評価結果](docs/preconditions.md)を参照してください。
+これは引数の存在確認であり、自然文からの抽出や実行権限の確認を代替しません。

@@ -7,6 +7,8 @@ from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
+from harness.preconditions import check_preconditions
+
 
 def probability(value):
     return (
@@ -59,13 +61,16 @@ def evaluate(case, response, threshold):
     known = probability(confidence) and probability(complete)
     effective = min(confidence, complete) if known else None
     allowed = choice in case['allowed_choices']
+    precondition = (check_preconditions(case['preconditions'], choice)
+                    if 'preconditions' in case else 'not_checked')
     reason = (
+        precondition if precondition not in {'passed', 'not_checked'} else
         'policy_denied' if not allowed else
         'confidence_missing' if not known else
         'low_confidence' if effective < threshold else 'eligible'
     )
     return {
-        'choice': choice, 'confidence': effective,
+        'choice': choice, 'confidence': effective, 'precondition': precondition,
         'correct': choice == case['expected'], 'policy_violation': not allowed,
         'would_accept': reason == 'eligible', 'reason': reason,
         'model': response.get('model'),
@@ -96,6 +101,8 @@ def summarize(records):
         'accuracy': sum(r['correct'] for r in successful) / len(successful) if successful else None,
         'policy_violations': sum(r['policy_violation'] for r in successful),
         'would_accept': len(accepted),
+        'precondition_rejections': sum(r.get('precondition', 'not_checked') not in
+                                      {'passed', 'not_checked'} for r in successful),
         'accepted_errors': sum(not r['correct'] for r in accepted),
         'mean_latency_ms': sum(r['latency_ms'] for r in records) / len(records) if records else None,
         'confidence_bins': bins,
